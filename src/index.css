@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+h3,
+h1,
+h2,
+h4,
+h5,
+h6,
+span,
+small,
+p,
+b,
+div {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+@media only screen and (max-width: 500px) {
+  .flex-576 {
+    flex-direction: column;
+  }
+  .special {
+    display: none;
+  }
+  .special-2 {
+    display: none;
+  }
+}
+.special {
+  width: 500px;
+}
+@media only screen and (max-width: 500px) {
+  .section-p {
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 100%;
+  }
+  .details {
+    flex-direction: column;
+    padding-left: 1px;
+    padding: 0;
+    margin: 0;
+  }
+  .details-head {
+    flex-direction: column;
+  }
+  .generater {
+    flex-direction: column;
+  }
+  .generater-flex {
+    width: 290px;
+  }
+  .gene-div {
+    flex-direction: column;
+  }
+}
+.generater-flex {
+}
+.section-p {
+  color: rgb(52, 53, 54);
+}
