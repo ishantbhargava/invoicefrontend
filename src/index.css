@@ -16,6 +16,12 @@ div {
 }
 
 @media only screen and (max-width: 500px) {
+  .preview-head {
+    width: 300px;
+  }
+  .sample {
+    margin-top: 13px;
+  }
   .flex-576 {
     flex-direction: column;
   }
@@ -30,6 +36,13 @@ div {
   width: 500px;
 }
 @media only screen and (max-width: 500px) {
+  .invoicehead {
+    font-size: 17px;
+    padding-top: 0;
+    margin-top: 1px;
+    line-height: 27px;
+  }
+
   .section-p {
     margin-left: 5%;
     margin-right: 5%;
@@ -53,9 +66,106 @@ div {
   .gene-div {
     flex-direction: column;
   }
+  .btn-logout {
+    margin-top: 25px;
+  }
+  .invoice-flex {
+    margin: 30px 0 0 0;
+    display: flex;
+    gap: 20%;
+    padding: 15px 0 15px 15px;
+    background-color: rgb(249, 250, 251);
+    overflow: auto;
+  }
+  .checkout-card {
+    padding: 0 15px 0 15px;
+  }
+  .generater-page {
+    width: 90%;
+    padding: 0 25x 0 25px;
+    border: solid 1px transparent;
+    border-radius: 2%;
+  }
 }
 .generater-flex {
 }
 .section-p {
   color: rgb(52, 53, 54);
+}
+
+.btn-back {
+  background-color: rgb(212, 212, 216);
+}
+.btn-back:hover {
+  background-color: grey;
+  color: white;
+}
+.answers {
+  width: 100%;
+}
+.nav-spc {
+  padding-left: 5%;
+}
+
+.profile {
+  border-bottom: 1px solid grey;
+}
+.stats-card {
+  border: solid 1px grey;
+  box-shadow: dimgrey;
+}
+
+.invoicehead {
+  margin-bottom: 10px;
+  margin-left: 25px;
+  margin-top: 15px;
+  font-weight: 650;
+}
+.crt-btn {
+  margin-bottom: 10px;
+  margin-top: 15px;
+  padding: 6px;
+  padding-left: 10px;
+
+  padding-right: 10px;
+  width: 170px;
+}
+@media only screen and (min-width: 500px) {
+  .btn-logout {
+    margin-top: 218px;
+  }
+  .stats {
+    width: 290px;
+    border-right: 1px solid grey;
+  }
+  .crt-btn {
+    margin-right: 25px;
+  }
+  .invoice-flex {
+    margin: 30px 30px 0 30px;
+    display: flex;
+    gap: 20%;
+    padding: 15px 25px 15px 15px;
+    background-color: rgb(249, 250, 251);
+  }
+  .checkout {
+    width: 75%;
+  }
+  .checkout-card {
+    padding: 0 25px 0 25px;
+  }
+  .generater-page {
+    width: 33%;
+    padding: 0 25x 0 25px;
+    border: solid 1px transparent;
+    border-radius: 2%;
+  }
+  .preview-head {
+    width: 700px;
+  }
+}
+
+.gene-page-text {
+  font-size: 13px;
+  font-weight: 600;
 }

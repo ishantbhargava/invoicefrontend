@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CheckOutlined,
   FormOutlined,
@@ -8,6 +9,7 @@ import {
 import { Button } from "antd";
 
 function Main() {
+  const navigate = useNavigate();
   return (
     <main className="w-full  ">
       <div className="text-center px-4 mt-5">
@@ -24,42 +26,48 @@ function Main() {
             Simplify
           </span>
           <br />
-          Your Invoicing Hassles
+          Your Invoicing Hassles.
         </h1>
         <h6 className="mt-5 text-secondary ">
           How to streamline your invoicing process?{" "}
         </h6>
         <div className="mt-3 text-secondary d-flex justify-content-center flex-576 ">
           <h6 className=" ">
-            <span className="text-white bg-secondary rounded-circle px-2   ">
+            <span className="text-white bg-secondary rounded-circle py-1 px-2  ">
               1
             </span>
             <span className="mx-2">Create your invoice generater.</span>
           </h6>
           <h6 className="">
-            <span className="text-white bg-secondary rounded-circle px-2   ">
+            <span className="text-white bg-secondary rounded-circle py-1 px-2   ">
               2
             </span>
             <span className="mx-2">
-              Send the generater link to your Custumer.
+              Send the generator link to your customers
             </span>
           </h6>
           <h6 className="">
-            <span className="text-white  rounded-circle px-2   ">
+            <span className="text-white align-top   ">
               <CheckOutlined
-                className="rounded-circle py-1 px-2"
-                style={{ backgroundColor: "#2DAFAF" }}
+                className="px-1   "
+                style={{
+                  backgroundColor: "#2DAFAF",
+                  borderRadius: "50%",
+                  height: "26px",
+                  width: "22px",
+                }}
               />
             </span>
-            <span className="mx-2">
-              Send the generater link to your Custumer.
+            <span className="mx-2  ">
+              Customers generate their own invoices.
             </span>
           </h6>
         </div>
         <Button
           type="primary"
           shape="round"
-          className="bg-dark mt-5 px-4 fw-bolder"
+          className="bg-dark mt-5 px-3 fw-bold py-1"
+          onClick={() => navigate("/signup")}
         >
           Get Started
         </Button>
@@ -67,14 +75,14 @@ function Main() {
           Take ~1 minute signup. No Credit card required
         </p>
       </div>
-      <section id="features" className="mt-5 mx-1 bg-white ">
-        <div style={{ paddingTop: "200px" }} className="mx-auto text-center ">
+      <section id="features" className=" mx-1 bg-white ">
+        <div style={{ paddingTop: "100px" }} className="mx-auto text-center ">
           <h5 className="" style={{ color: "rgb(66, 153, 147)" }}>
             Generate Invoice automatically
           </h5>
           <h2 className="fw-bold">Simplified Invoicing Solutions</h2>
           <p
-            style={{ paddingBottom: "200px" }}
+            style={{ paddingBottom: "100px" }}
             className="fw-normal   section-p lh-lg h6 "
           >
             Simplifies your invoicing process, eliminating the need for manual

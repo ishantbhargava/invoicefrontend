@@ -1,11 +1,39 @@
 import logo from "./logo.svg";
 import "./App.css";
-import FrontPages from "./pages/FrontPages";
+import HomePage from "./pages/HomePage";
+import { Routes, Route } from "react-router-dom";
+import SignUp from "./pages/SignUp";
+import Pagenotfound from "./pages/PageNotFound";
+import SignIn from "./pages/SignIn";
+import TermPolicy from "./pages/Term-Policy";
+import DashBoard from "./pages/DashBoard";
+import Protected from "./pages/Protected";
+import CheckOut from "./pages/CheckOut";
+import ForgetPassword from "./pages/ForgetPassword";
+import LastPage from "./pages/LastPage";
+import CreateInvoice from "./pages/CreateInvoice";
 
 function App() {
   return (
-    <div style={{backgroundColor:"rgb(245, 245, 240)"}} className="App">
-      <FrontPages  />
+    <div style={{ backgroundColor: "rgb(248 250 252)" }} className="App">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<SignIn />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+
+        <Route path="/term-policy" element={<TermPolicy />} />
+        <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/get-invoice/:slug" element={<LastPage />} />
+
+        <Route
+          path="/dashboard"
+          element={<Protected Component={DashBoard} />}
+        ></Route>
+        <Route path="/create-invoice" element={<CreateInvoice />}></Route>
+
+        <Route path="*" element={<Pagenotfound />} />
+      </Routes>
     </div>
   );
 }

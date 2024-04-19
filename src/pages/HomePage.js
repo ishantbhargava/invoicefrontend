@@ -7,21 +7,21 @@ import Selfservice from "../components/Self-service";
 import PricingPlans from "../components/PricingPlans";
 import UserVoices from "../components/UserVoices";
 import Askedquestion from "../components/Askedquestion";
-import Footer from "../components/Footer";
-function FrontPages() {
+import Layout from "../Layout/Layout";
+function HomePage() {
   return (
     <div>
-      <Navbar />
-      <Main />
-      <Review />
-      <Generater />
-      <Selfservice />
-      <PricingPlans />
-      <UserVoices />
-      <Askedquestion />
-      <Footer />{" "}
+      <Layout>
+        <Main />
+        <Review />
+        <Generater />
+        <Selfservice />
+        <PricingPlans />
+        <UserVoices />
+        <Askedquestion />
+      </Layout>
     </div>
   );
 }
 
-export default FrontPages;
+export default HomePage;

@@ -1,28 +1,37 @@
 import React from "react";
-import { logo } from "../images/logo.png";
+import { useNavigate } from "react-router-dom";
+import logo from "../images/logo.png";
 function Navbar() {
+  const navigate = useNavigate();
   return (
     <div>
-      <nav className="d-flex pt-5 px-2 w-100 justify-content-between">
-        <div className="d-flex  gap-5  justify-content-around">
-          <small>
-            <img alt="logo" />
-          </small>
-          <small className=" special-2">Features</small>
-          <small className="special-2">Pricing</small>
-          <small className="special-2">FAQs</small>
+      <nav className="d-flex  w-100 pt-5  nav-spc  justify-content-between">
+        <div className="d-flex    align-items-center justify-content-around">
+          <small></small>
+          <img src={logo} alt="logo" />
+          <button className="btn  ">
+            <small className=" special-2 px-4">Features</small>
+          </button>
+          <small className="special-2 px-3">Pricing</small>
+          <small className="special-2 px-3">FAQs</small>
         </div>
         {/* <div className="special  "></div> */}
-        <div className="d-flex align-items-center gap-3    justify-content-around">
-          <small>sign in</small>
+        <div className="d-flex align-items-center gap-3  pe-4   justify-content-around">
+          <button
+            className="btn btn-light small "
+            onClick={() => navigate("/login")}
+          >
+            <small>Sign in</small>
+          </button>
           <small>
             {" "}
             <button
               type="primary rounded-lg"
-              style={{ backgroundColor: "#2DAFAF" }}
-              className="text-white border-white pt-1 pb-1 fw-bold rounded"
+              style={{ backgroundColor: "#0891b2", borderRadius: "9999px" }}
+              className="text-white border-white p-2 px-3 pe-3 fw-bold "
+              onClick={() => navigate("/signup")}
             >
-              Get Started today
+              Get Started <span className="special-2"> today</span>
             </button>
           </small>
         </div>
