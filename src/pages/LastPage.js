@@ -36,7 +36,6 @@ function LastPage() {
     email,
     tax,
     notes,
-    //downloadPdf,
     loader
   ) {
     setInfo({ name, address, city, state, code, country, email, tax, notes });
@@ -44,7 +43,9 @@ function LastPage() {
     setLoader(loader);
     //setDownload(downloadPdf);
   }
-
+  const functionHandlefromChild = (downloadPdf) => {
+    setDownload(downloadPdf);
+  };
   return (
     <div
       style={{ width: "75%" }}
@@ -54,10 +55,10 @@ function LastPage() {
         sendData={handleDataFromChild}
         invoice={invoice}
         loader={loader}
-        downloadPdf={download}
+        download={download}
       />
       <Preview
-        //sendFunction={handleDataFromChild}
+        sendFunction={functionHandlefromChild}
         info={info}
         invoice={invoice}
       />

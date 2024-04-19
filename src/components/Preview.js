@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
+import { createContext, useContext } from "react";
+
 import React from "react";
 import html2canvas from "html2canvas";
 import jsPdf from "jspdf";
-function Preview({ invoice, info = {}, sendFunction, getloader }) {
+const MyContext = createContext();
+
+const MyContextProvider = ({ children }) => {
   const [loader, setLoader] = useState(false);
+
   const downloadPdf = () => {
     const capture = document.querySelector(".preview-head");
     setLoader(true);
@@ -17,13 +22,19 @@ function Preview({ invoice, info = {}, sendFunction, getloader }) {
       doc.save("reciept.pdf");
     });
   };
+  return (
+    <MyContext.Provider value={{ loader, downloadPdf }}>
+      {children}
+    </MyContext.Provider>
+  );
+};
+function Preview({ invoice, info = {} }) {
   // useEffect(() => {
-  //   sendFunction(downloadPdf);
-  // }, [sendFunction]);
+  //   sendFunction(downloadPdf());
+  // }, []);
 
   let totalItemFinalPrice = 0;
   let totalTaxAmount = 0;
-
   return (
     <div>
       <div>
@@ -124,13 +135,11 @@ function Preview({ invoice, info = {}, sendFunction, getloader }) {
             </>
           </div>
         </div>
-        <button onClick={downloadPdf} disabled={!(loader === false)}>
-          {" "}
-          {loader ? <span>downloading</span> : <span>download</span>}
-        </button>
+       
       </div>
     </div>
   );
 }
-
+const usePdf = () => useContext(MyContext);
+export { usePdf, MyContextProvider };
 export default Preview;

@@ -74,7 +74,9 @@ function CreateInvoice() {
       );
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
-        navigate(`/get-invoice/${res.data.invoice.slug}`);
+        //navigate(`/dashboard/${res.data.invoice.slug}`);
+        console.log(res.data.invoice.slug);
+        navigate("/dashboard");
       } else {
         toast.error(res.data && res.data.message);
       }

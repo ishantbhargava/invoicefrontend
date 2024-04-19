@@ -12,6 +12,7 @@ import CheckOut from "./pages/CheckOut";
 import ForgetPassword from "./pages/ForgetPassword";
 import LastPage from "./pages/LastPage";
 import CreateInvoice from "./pages/CreateInvoice";
+import UpdatePages from "./pages/UpdatePages";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <Route path="/term-policy" element={<TermPolicy />} />
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/get-invoice/:slug" element={<LastPage />} />
-
+        <Route path="/update-invoice/:id" element={<UpdatePages />} />
         <Route
           path="/dashboard"
           element={<Protected Component={DashBoard} />}

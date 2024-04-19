@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-
-function YourInfo({ invoice, sendData, loader, downloadPdf }) {
+import { usePdf } from "./Preview";
+function YourInfo({ invoice, sendData }) {
   const [name, setName] = useState();
   const [address, setAddress] = useState();
   const [city, setCity] = useState();
@@ -10,12 +10,14 @@ function YourInfo({ invoice, sendData, loader, downloadPdf }) {
   const [email, setEmail] = useState();
   const [tax, setTax] = useState();
   const [notes, setNotes] = useState();
-
+  const { downloadPdf } = usePdf();
+  const [loader, setLoader] = useState(false);
   const sendDataToParent = () =>
     sendData(name, address, city, state, code, country, email, tax, notes);
   const downloadFunction = () => {
+    setLoader(true);
     downloadPdf();
-    alert("done");
+    setLoader(false);
   };
   useEffect(() => {
     sendDataToParent();
@@ -136,6 +138,7 @@ function YourInfo({ invoice, sendData, loader, downloadPdf }) {
               <div className="d-grid ">
                 <button
                   onClick={downloadFunction}
+                  disabled={!(loader === false)}
                   style={{
                     backgroundColor: "#0891b2",
                     borderRadius: "8px",
@@ -143,7 +146,11 @@ function YourInfo({ invoice, sendData, loader, downloadPdf }) {
                   className="btn bsb-btn-xl mt-3   btn-primary"
                   type="submit"
                 >
-                  Download Invoice{" "}
+                  {loader ? (
+                    <span>downloading</span>
+                  ) : (
+                    <span>Download invoice</span>
+                  )}
                 </button>
               </div>
             </div>
