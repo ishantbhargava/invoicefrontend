@@ -25,13 +25,22 @@ function App() {
 
         <Route path="/term-policy" element={<TermPolicy />} />
         <Route path="/checkout" element={<CheckOut />} />
-        <Route path="/get-invoice/:slug" element={<LastPage />} />
-        <Route path="/update-invoice/:id" element={<UpdatePages />} />
+        <Route
+          path="/get-invoice/:slug"
+          element={<Protected Component={LastPage} />}
+        ></Route>
+        <Route
+          path="/update-invoice/:slug"
+          element={<Protected Component={UpdatePages} />}
+        ></Route>
         <Route
           path="/dashboard"
           element={<Protected Component={DashBoard} />}
         ></Route>
-        <Route path="/create-invoice" element={<CreateInvoice />}></Route>
+        <Route
+          path="/create-invoice"
+          element={<Protected Component={CreateInvoice} />}
+        ></Route>
 
         <Route path="*" element={<Pagenotfound />} />
       </Routes>

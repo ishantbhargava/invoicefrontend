@@ -4,87 +4,65 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
-function CreateInvoice() {
-  const [currentDate, setCurrentDate] = useState();
-  const [productName, setProductName] = useState();
-  const [price, setPrice] = useState();
-  const [quantity, setQuantity] = useState();
-  const [productList, setProductList] = useState([
-    { productName: productName, price: price, quantity: quantity },
-  ]);
 
-  const addProduct = () => {
-    setProductList([
-      { productName: productName, price: price, quantity: quantity },
-    ]);
-  };
-  useEffect(() => {
-    setProductList([
-      //...productList,
-      { productName: productName, price: price, quantity: quantity },
-    ]);
+function CreateInvoice() {
+  const [currentDate, setCurrentDate] = useState("");
+  const [productList, setProductList] = useState([
+    { productName: "", price: "", quantity: "" },
+  ]);
+  const [formData, setFormData] = useState({
+    products: [],
+    currentDate: "",
+    companyName: "",
+    companyAddress: "",
+    companyEmail: "",
   });
-  // const test = () => {
-  //   setProductList([
-  //     //...productList,
-  //     { productName: productName, price: price, quantity: quantity },
-  //   ]);
-  // };
-  const removeProduct = ({ index }) => {
-    const list = [...productList];
-    list.splice(index, 1);
-    setProductList(list);
-  };
+
+  const navigate = useNavigate("");
+
   useEffect(() => {
     setCurrentDate(moment().format("Do MMM YY"));
 
     setFormData({ ...formData, currentDate: currentDate });
   }, [currentDate]);
-
-  const [formData, setFormData] = useState({
-    products: [],
-    companyName: "",
-    companyAddress: "",
-    companyEmail: "",
-  });
-  const navigate = useNavigate("");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({ ...formData, [name]: value });
+  };
+
+  const addProduct = () => {
+    setProductList([
+      ...productList,
+      { productName: "", price: "", quantity: "" },
+    ]);
+  };
+
+  const removeProduct = (index) => {
+    const updatedProducts = [...productList];
+    updatedProducts.splice(index, 1);
+    setProductList(updatedProducts);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const updatedProductList = productList.filter(
-        (product) => product.productName && product.price && product.quantity
-      );
-      console.log(updatedProductList);
-      const updatedFormData = {
-        ...formData,
-        products: updatedProductList,
-      };
-
       const res = await axios.post(
         "http://localhost:9999/api/v1/invoice/create-invoice",
-        updatedFormData
+        { ...formData, products: productList }
       );
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
-        //navigate(`/dashboard/${res.data.invoice.slug}`);
-        console.log(res.data.invoice.slug);
         navigate("/dashboard");
       } else {
         toast.error(res.data && res.data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error("something went wrong");
+      toast.error("Something went wrong");
     }
   };
+
   return (
     <div>
       <div className="pt-5 ">
@@ -93,131 +71,115 @@ function CreateInvoice() {
             <h4 className="fw-bold pt-3 ">Create New Invoice Generator</h4>
             <form onSubmit={handleSubmit}>
               {/* product section */}
-
-              {productList.map((details, index) => (
+              {productList.map((product, index) => (
                 <div key={index}>
                   <div className="me-2 mt-3">
-                    <label className="gene-page-text"> Product Name</label>
+                    <label className="gene-page-text">Product Name</label>
                     <input
                       required
                       name="productName"
-                      style={{ fontSize: "14px", fontWeight: "390" }}
-                      placeholder="enter your product name"
+                      value={product.productName}
                       onChange={(e) => {
-                        setProductName(e.target.value);
+                        const updatedProducts = [...productList];
+                        updatedProducts[index].productName = e.target.value;
+                        setProductList(updatedProducts);
                       }}
-                      className="w-100 rounded border border-grey font-weight-light
-                p-2 mt-2 text-secondary blackquote "
+                      style={{ fontSize: "14px", fontWeight: "390" }}
+                      placeholder="Enter product name"
+                      className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                     />
                   </div>
-
                   <div className="mt-2 d-flex gap-3">
                     <div className="w-100">
                       <label className="gene-page-text">Price</label>
                       <input
                         required
-                        id="price"
                         name="price"
+                        value={product.price}
+                        onChange={(e) => {
+                          const updatedProducts = [...productList];
+                          updatedProducts[index].price = e.target.value;
+                          setProductList(updatedProducts);
+                        }}
                         style={{ fontSize: "14px", fontWeight: "390" }}
                         type="number"
                         placeholder="Product Price"
-                        onChange={(e) => {
-                          setPrice(e.target.value);
-                        }}
-                        className="w-100 rounded
-                            border border-grey font-weight-light p-2 mt-2   text-secondary  blackquote    "
+                        className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                       />
                     </div>
                     <div className="w-100">
                       <label className="gene-page-text">Quantity</label>
                       <input
                         required
-                        id="quantity"
                         name="quantity"
+                        value={product.quantity}
+                        onChange={(e) => {
+                          const updatedProducts = [...productList];
+                          updatedProducts[index].quantity = e.target.value;
+                          setProductList(updatedProducts);
+                        }}
                         style={{ fontSize: "14px", fontWeight: "390" }}
                         type="number"
-                        onChange={(e) => setQuantity(e.target.value)}
-                        placeholder="quantity"
-                        className=" w-100 rounded
-                  border border-grey font-weight-light p-2 mt-2   text-secondary  blackquote "
+                        placeholder="Quantity"
+                        className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                       />
                     </div>
+                    <button
+                      onClick={() => removeProduct(index)}
+                      className="btn btn-outline-danger mt-2"
+                      type="button"
+                    >
+                      Remove
+                    </button>
                   </div>
-                  {productList.length - 1 === index &&
-                    productList.length < 8 && (
-                      <div className="d-flex justify-content-between">
-                        <div>
-                          <button
-                            style={{
-                              backgroundColor: "#0891b2",
-                              borderRadius: "8px",
-                            }}
-                            className="btn bsb-btn-xl mt-3   text-white"
-                            type="submit"
-                            onClick={addProduct}
-                          >
-                            Add Product
-                          </button>
-                        </div>
-                        <div>
-                          {productList.length > 1 && (
-                            <button
-                              onClick={removeProduct}
-                              style={{
-                                backgroundColor: "",
-                                borderRadius: "8px",
-                              }}
-                              className=" mt-3  btn btn-outline-danger"
-                              type="submit"
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    )}
                 </div>
               ))}
+              <button
+                onClick={addProduct}
+                className="btn text-white"
+                style={{
+                  backgroundColor: "#0891b2",
+                  borderRadius: "8px",
+                  marginTop: "4px",
+                }}
+                type="button"
+              >
+                Add Product
+              </button>
               {/* productSectionEnd */}
               <div className="me-2 mt-3">
-                <label className="gene-page-text"> Company Name</label>
+                <label className="gene-page-text">Company Name</label>
                 <input
                   required
                   name="companyName"
                   onChange={handleChange}
                   style={{ fontSize: "14px", fontWeight: "390" }}
-                  placeholder="enter your company name"
-                  className="w-100 rounded
-                            border border-grey font-weight-light p-2 mt-2   text-secondary  blackquote    "
+                  placeholder="Enter company name"
+                  className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                 />
               </div>
-
               <div className="me-2 mt-3">
-                <label className="gene-page-text"> Company Address</label>
+                <label className="gene-page-text">Company Address</label>
                 <input
                   required
                   name="companyAddress"
                   onChange={handleChange}
                   style={{ fontSize: "14px", fontWeight: "390" }}
-                  placeholder="enter your company address"
-                  className="w-100 rounded
-                            border border-grey font-weight-light p-2 mt-2   text-secondary  blackquote    "
+                  placeholder="Enter company address"
+                  className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                 />
               </div>
               <div className="me-2 mt-3">
                 <label className="gene-page-text">
-                  {" "}
-                  Company Email (optional){" "}
+                  Company Email (optional)
                 </label>
                 <input
-                  required
                   name="companyEmail"
                   onChange={handleChange}
                   style={{ fontSize: "14px", fontWeight: "390" }}
-                  placeholder="enter your company Email"
+                  placeholder="Enter company email"
                   type="email"
-                  className="w-100 rounded
-                            border border-grey font-weight-light p-2 mt-2   text-secondary  blackquote    "
+                  className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                 />
               </div>
               <div className="col-12 mb-3">
@@ -227,7 +189,7 @@ function CreateInvoice() {
                       backgroundColor: "#0891b2",
                       borderRadius: "8px",
                     }}
-                    className="btn bsb-btn-xl mt-3   btn-primary"
+                    className="btn bsb-btn-xl mt-3 btn-primary"
                     type="submit"
                   >
                     Create Invoice{" "}

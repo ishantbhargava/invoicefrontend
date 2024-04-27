@@ -4,6 +4,7 @@ import axios from "axios";
 import { Button } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { EditFilled, DeleteFilled } from "@ant-design/icons";
 function InvoiceDashboard({ invoices, getAllInvoices }) {
   const navigate = useNavigate("");
   //const [companyName, setCompanyName] = useState();
@@ -60,38 +61,39 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
       </section>
       {invoices.map((bill) => (
         <section key={bill._id}>
-          <div
-            className="w-100"
-            onClick={() => navigate(`/get-invoice/${bill?.companyName}`)}
-          >
-            <table className="invoice-flex-1 border rounded  ">
-              <tr>
-                <td className=" small">{bill?.currentDate}</td>
-              </tr>
-              <tr className="d-flex gap-5 justify-content-around w-100">
-                <td className=" small">{bill?.companyName}</td>
-                <td className=" small">{bill?.companyAddress}</td>
-                <td className=" small">{bill?.companyEmail} </td>
-
-                <tr className="">
-                  <td>
-                    <Button
-                      type="danger"
-                      ghost
-                      onClick={() => navigate(`/update-invoice/${bill._id}`)}
-                    >
-                      edit{" "}
-                    </Button>
-                  </td>
-                  <td>
-                    <button onClick={() => deleteInvoice(bill._id)}>
-                      delete
-                    </button>
-                  </td>
-                </tr>
-              </tr>
-            </table>
-          </div>
+          <table className="invoice-flex-1 border rounded  ">
+            <tr className="">
+              <td className=" small">{bill?.currentDate}</td>
+            </tr>
+            <tr
+              className="d-flex gap-5 justify-content-around w-50"
+              onClick={() => navigate(`/get-invoice/${bill?.companyName}`)}
+            >
+              <td className=" small">{bill?.companyName}</td>
+              <td className=" small">{bill?.companyAddress}</td>
+              <td className=" small">{bill?.companyEmail} </td>
+            </tr>
+            <tr className=" d-flex    gap-2">
+              <td>
+                <Button
+                  className="w-100 h-100 border-danger"
+                  onClick={() =>
+                    navigate(`/update-invoice/${bill.companyName}`)
+                  }
+                >
+                  <EditFilled className="text-danger h-100 w-100" />
+                </Button>
+              </td>
+              <td>
+                <Button
+                  className="w-100 h-100 border-primary"
+                  onClick={() => deleteInvoice(bill._id)}
+                >
+                  <DeleteFilled className="text-primary h-100 w-100" />
+                </Button>
+              </td>
+            </tr>
+          </table>
         </section>
       ))}
     </div>

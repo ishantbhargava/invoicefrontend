@@ -45,7 +45,7 @@ function Preview({ invoice, info = {} }) {
               <h2 className="fw-bolder">Invoice</h2>
               <div>
                 <span className="fw-bold">Invoice Number: </span>
-                <span>1</span>{" "}
+                <span></span>{" "}
               </div>
               <div>
                 <span className="fw-bold">Date of issue: </span>
@@ -135,7 +135,6 @@ function Preview({ invoice, info = {} }) {
             </>
           </div>
         </div>
-       
       </div>
     </div>
   );
