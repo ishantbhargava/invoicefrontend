@@ -44,11 +44,30 @@ function CreateInvoice() {
   };
 
   const handleSubmit = async (e) => {
+    productList.forEach((product) => {
+      if (product.price > 0) {
+      }
+    });
+
     e.preventDefault();
 
     try {
+      let hasInvalidPrice = false;
+      productList.forEach((product) => {
+        if (
+          parseFloat(product.price) <= 0 ||
+          parseFloat(product.quantity) <= 0
+        ) {
+          hasInvalidPrice = true;
+        }
+      });
+      if (hasInvalidPrice) {
+        toast.error("Price and quantity should be a positive number");
+        return;
+      }
+
       const res = await axios.post(
-        "http://localhost:9999/api/v1/invoice/create-invoice",
+        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/create-invoice`,
         { ...formData, products: productList }
       );
       if (res && res.data.success) {
@@ -124,19 +143,22 @@ function CreateInvoice() {
                         className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                       />
                     </div>
-                    <button
-                      onClick={() => removeProduct(index)}
-                      className="btn btn-outline-danger mt-2"
-                      type="button"
-                    >
-                      Remove
-                    </button>
                   </div>
+                  {productList.length > 1 && (
+                    <div className="d-flex justify-content-between">
+                      <button
+                        onClick={() => removeProduct(index)}
+                        className="btn btn-outline-danger mt-3"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
               <button
                 onClick={addProduct}
-                className="btn text-white"
+                className="btn mt-3 text-white"
                 style={{
                   backgroundColor: "#0891b2",
                   borderRadius: "8px",

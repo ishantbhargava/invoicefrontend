@@ -2,7 +2,7 @@ import React from "react";
 
 function Askedquestion() {
   return (
-    <div className="bg-white pb-5 ">
+    <div className="bg-white pb-5 " id="FAQs" class="FAQs">
       <div className="mx-5 bg-white ">
         <h4 className="fw-bolder">Frequently asked questions</h4>
         <div className="mt-5 ">

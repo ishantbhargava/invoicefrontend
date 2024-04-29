@@ -3,7 +3,7 @@ import { CheckOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 function PricingPlans() {
   return (
-    <div className="mt-5 pb-5">
+    <div className="mt-5 pb-5" id="pricing" class="pricing">
       <div className="pt-5 text-center pb-5 ">
         <h6 className="text-primary  ">Simple and Flexible Pricing Plan</h6>
         <h1 className="fw-bolder">Pay Only for What You Use</h1>

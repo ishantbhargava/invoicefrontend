@@ -13,7 +13,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:9999/api/v1/auth/signup", {
+      const res = await axios.post(`${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/signup`, {
         email,
         password,
         answer,
@@ -73,6 +73,7 @@ function SignUp() {
                             <div className="form-floating ">
                               <input
                                 style={{ fontSize: "12px" }}
+                                type="email"
                                 placeholder="your@example.com"
                                 className="w-100 rounded
                               text-secondary

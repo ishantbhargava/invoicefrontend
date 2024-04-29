@@ -24,7 +24,7 @@ const ForgotPassword = () => {
         toast.error("answer is required");
       }
       const res = await axios.post(
-        "http://localhost:9999/api/v1/auth/forget-password",
+        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/forget-password`,
         {
           email,
           newPassword,
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
                             htmlFor="password"
                             className="form-label text-start"
                           >
-                            <small className="fw-bold">Password</small>
+                            <small className="fw-bold">New Password</small>
                           </label>
                           <div className="col-12">
                             <div className="form-floating ">

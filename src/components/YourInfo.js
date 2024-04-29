@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePdf } from "./Preview";
 function YourInfo({ invoice, sendData }) {
+  const navigate = useNavigate("");
   const [name, setName] = useState();
   const [address, setAddress] = useState();
   const [city, setCity] = useState();
@@ -14,9 +16,10 @@ function YourInfo({ invoice, sendData }) {
   const [loader, setLoader] = useState(false);
   const sendDataToParent = () =>
     sendData(name, address, city, state, code, country, email, tax, notes);
-  const downloadFunction = () => {
+  const downloadFunction = async () => {
     setLoader(true);
-    downloadPdf();
+    await downloadPdf();
+    navigate("/dashboard");
     setLoader(false);
   };
   useEffect(() => {

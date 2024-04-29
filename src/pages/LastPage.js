@@ -14,7 +14,7 @@ function LastPage() {
     const getInvoiceBySlug = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9999/api/v1/invoice/get-invoice/${slug}`
+          `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/get-invoice/${slug}`
         );
         setInvoice(res.data.invoice);
         console.log(res.data.invoice.products);

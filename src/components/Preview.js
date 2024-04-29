@@ -1,14 +1,10 @@
-import { useState, useEffect } from "react";
+import react, { useState, useEffect } from "react";
 import { createContext, useContext } from "react";
-
-import React from "react";
 import html2canvas from "html2canvas";
 import jsPdf from "jspdf";
 const MyContext = createContext();
-
 const MyContextProvider = ({ children }) => {
   const [loader, setLoader] = useState(false);
-
   const downloadPdf = () => {
     const capture = document.querySelector(".preview-head");
     setLoader(true);
@@ -39,7 +35,7 @@ function Preview({ invoice, info = {} }) {
     <div>
       <div>
         <p className="fw-bold text-secondary">Preview</p>
-        <div className="bg-white mx-auto border preview-head rounded">
+        <div className="bg-white  border preview-head rounded">
           <div className="mx-4 py-4 ">
             <>
               <h2 className="fw-bolder">Invoice</h2>

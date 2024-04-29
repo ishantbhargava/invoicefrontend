@@ -5,11 +5,12 @@ import {
   StrikethroughOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
-
+import { useNavigate } from "react-router-dom";
 function Generater() {
+  let navigate = useNavigate();
   return (
-    <div className="px-5 bg-white ">
-      <section className=" d-flex gap-5 justify-content-between generater">
+    <div className="px-3 bg-white feature " id="feature">
+      <section className=" d-flex px-3 gap-5 justify-content-between generater">
         <div className="generater-flex pt-5  w-100">
           <h5 className="text-primary">Create your Generator</h5>
           <h3 className=" fw-bolder">Simplify Invoicing with One-Time Setup</h3>
@@ -52,6 +53,7 @@ function Generater() {
           Ready to dive in? <br /> Start your free trial today.
         </h4>
         <Button
+          onClick={() => navigate("/signup")}
           shape="round"
           style={{ backgroundColor: "#2DAFAF" }}
           className="my-auto px-4 text-white px-5 fw-bolder"

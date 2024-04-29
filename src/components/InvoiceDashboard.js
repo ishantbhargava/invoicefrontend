@@ -8,17 +8,17 @@ import { EditFilled, DeleteFilled } from "@ant-design/icons";
 function InvoiceDashboard({ invoices, getAllInvoices }) {
   const navigate = useNavigate("");
   //const [companyName, setCompanyName] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const deleteInvoice = async (id) => {
     try {
-      let answer = window.prompt("Are You Sure want to delete this product ? ");
-      if (!answer) return;
       const { data } = await axios.delete(
-        `http://localhost:9999/api/v1/invoice/delete-invoice/${id}`
+        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/delete-invoice/${id}`
       );
       await getAllInvoices();
       //window.location.reload();
       toast.success("invoices DEleted Succfully");
+      setShowModal(false);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -61,6 +61,50 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
       </section>
       {invoices.map((bill) => (
         <section key={bill._id}>
+          <div
+            className={`modal ${showModal ? "show" : ""}`}
+            tabIndex="-1"
+            role="dialog"
+            style={{ display: showModal ? "block" : "none" }}
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Delete Conformation</h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    onClick={() => setShowModal(true)}
+                  >
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <p>Are you sure you want to delete this item?</p>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => deleteInvoice(bill._id)}
+                  >
+                    yes,Delete{" "}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <table className="invoice-flex-1 border rounded  ">
             <tr className="">
               <td className=" small">{bill?.currentDate}</td>
@@ -87,7 +131,7 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
               <td>
                 <Button
                   className="w-100 h-100 border-primary"
-                  onClick={() => deleteInvoice(bill._id)}
+                  onClick={() => setShowModal(true)}
                 >
                   <DeleteFilled className="text-primary h-100 w-100" />
                 </Button>

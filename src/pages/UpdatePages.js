@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UpdatePages = () => {
   const [companyName, setCompanyName] = useState("");
   const [companyEmail, setCompanyEmail] = useState("");
   const [companyAddress, setCompanyAddress] = useState("");
-  const [productList, setProductList] = useState([]);
+  const [productList, setProductList] = useState([
+    { productName: "", price: "", quantity: "" },
+  ]);
   const { slug } = useParams();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,7 +19,7 @@ const UpdatePages = () => {
     const getInvoiceBySlug = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9999/api/v1/invoice/get-invoice/${slug}`
+          `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/get-invoice/${slug}`
         );
         const invoiceData = res.data.invoice;
         setCompanyName(invoiceData.companyName);
@@ -68,8 +70,21 @@ const UpdatePages = () => {
     console.log(productList);
 
     try {
+      let hasInvalidPrice = false;
+      productList.forEach((product) => {
+        if (
+          parseFloat(product.price) <= 0 ||
+          parseFloat(product.quantity) <= 0
+        ) {
+          hasInvalidPrice = true;
+        }
+      });
+      if (hasInvalidPrice) {
+        toast.error("Price and quantity should be a positive number");
+        return;
+      }
       const res = await axios.put(
-        `http://localhost:9999/api/v1/invoice/update-invoice/${slug}`,
+        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/update-invoice/${slug}`,
         { companyName, companyEmail, companyAddress, products: productList }
       );
       if (res && res.data.success) {
@@ -97,32 +112,42 @@ const UpdatePages = () => {
                     <label className="gene-page-text">Product Name</label>
                     <input
                       value={product.productName}
+                      style={{ fontSize: "14px", fontWeight: "390" }}
+                      placeholder="update product name"
+                      className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                       onChange={(e) =>
                         handleProductNameChange(index, e.target.value)
                       }
                       required
-                      className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
                     />
                   </div>
-                  <div className="me-2 mt-3">
-                    <label className="gene-page-text">Price</label>
-                    <input
-                      value={product.price}
-                      onChange={(e) => handlePriceChange(index, e.target.value)}
-                      required
-                      className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
-                    />
-                  </div>
-                  <div className="me-2 mt-3">
-                    <label className="gene-page-text">Quantity</label>
-                    <input
-                      value={product.quantity}
-                      onChange={(e) =>
-                        handleQuantityChange(index, e.target.value)
-                      }
-                      required
-                      className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
-                    />
+                  <div className="mt-2 d-flex gap-3">
+                    <div className="me-2 mt-3">
+                      <label className="gene-page-text">Price</label>
+                      <input
+                        style={{ fontSize: "14px", fontWeight: "390" }}
+                        placeholder="update product price"
+                        value={product.price}
+                        onChange={(e) =>
+                          handlePriceChange(index, e.target.value)
+                        }
+                        required
+                        className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
+                      />
+                    </div>
+                    <div className="me-2 mt-3">
+                      <label className="gene-page-text">Quantity</label>
+                      <input
+                        style={{ fontSize: "14px", fontWeight: "390" }}
+                        placeholder="update product quantity"
+                        value={product.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(index, e.target.value)
+                        }
+                        required
+                        className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
+                      />
+                    </div>
                   </div>
                   {productList.length > 1 && (
                     <div className="d-flex justify-content-between">
@@ -149,6 +174,8 @@ const UpdatePages = () => {
               <div className="me-2 mt-3">
                 <label className="gene-page-text">Company Name</label>
                 <input
+                  style={{ fontSize: "14px", fontWeight: "390" }}
+                  placeholder="update company  name"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   required
@@ -158,6 +185,8 @@ const UpdatePages = () => {
               <div className="me-2 mt-3">
                 <label className="gene-page-text">Company Address</label>
                 <input
+                  style={{ fontSize: "14px", fontWeight: "390" }}
+                  placeholder="update company address"
                   value={companyAddress}
                   onChange={(e) => setCompanyAddress(e.target.value)}
                   required
@@ -169,6 +198,8 @@ const UpdatePages = () => {
                   Company Email (optional)
                 </label>
                 <input
+                  style={{ fontSize: "14px", fontWeight: "390" }}
+                  placeholder="update company  email"
                   value={companyEmail}
                   onChange={(e) => setCompanyEmail(e.target.value)}
                   className="w-100 rounded border border-grey font-weight-light p-2 mt-2 text-secondary blackquote"
@@ -189,6 +220,7 @@ const UpdatePages = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
