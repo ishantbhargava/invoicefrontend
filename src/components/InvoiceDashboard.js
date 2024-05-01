@@ -5,20 +5,53 @@ import { Button } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
+import "bulma/css/bulma.min.css";
+import { Fragment, useRef } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+// import { X } from "react-feather";
 function InvoiceDashboard({ invoices, getAllInvoices }) {
   const navigate = useNavigate("");
   //const [companyName, setCompanyName] = useState();
-  const [showModal, setShowModal] = useState(false);
+  const [open, setOpen] = useState(false);
 
+  const cancelButtonRef = useRef(null);
+  const Modal = ({ open, onClose, children }) => (
+    // backdrop
+    <div
+      onClick={onClose}
+      className={`
+        fixed inset-0 flex justify-center items-center transition-colors
+        ${open ? "visible bg-black/20" : "invisible"}
+      `}
+    >
+      {/* modal */}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={`
+          bg-white rounded-xl shadow p-6 transition-all
+          ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
+        `}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
+        >
+          {/* <X /> */}
+        </button>
+        {children}
+      </div>
+    </div>
+  );
   const deleteInvoice = async (id) => {
     try {
       const { data } = await axios.delete(
         `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/delete-invoice/${id}`
       );
+      setOpen(false);
       await getAllInvoices();
       //window.location.reload();
       toast.success("invoices DEleted Succfully");
-      setShowModal(false);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -47,6 +80,7 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
           </small>
         </div>
       </section>
+
       <section>
         <table className="invoice-flex border rounded  ">
           <tr>
@@ -59,52 +93,9 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
           </tr>
         </table>
       </section>
+
       {invoices.map((bill) => (
         <section key={bill._id}>
-          <div
-            className={`modal ${showModal ? "show" : ""}`}
-            tabIndex="-1"
-            role="dialog"
-            style={{ display: showModal ? "block" : "none" }}
-          >
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Delete Conformation</h5>
-                  <button
-                    type="button"
-                    className="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                    onClick={() => setShowModal(true)}
-                  >
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <p>Are you sure you want to delete this item?</p>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => deleteInvoice(bill._id)}
-                  >
-                    yes,Delete{" "}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-dismiss="modal"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <table className="invoice-flex-1 border rounded  ">
             <tr className="">
               <td className=" small">{bill?.currentDate}</td>
@@ -131,15 +122,44 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
               <td>
                 <Button
                   className="w-100 h-100 border-primary"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => setOpen(true)}
                 >
                   <DeleteFilled className="text-primary h-100 w-100" />
                 </Button>
               </td>
             </tr>
           </table>
+          <main className="App">
+            <Modal open={open} onClose={() => setOpen(false)}>
+              <div className="text-center w-56">
+                <div className="mx-auto my-4 w-48">
+                  <h3 className="text-lg font-black text-gray-800">
+                    Confirm Delete
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Are you sure you want to delete this item?
+                  </p>
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    className="btn btn-danger w-full"
+                    onClick={() => deleteInvoice(bill._id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-light w-full"
+                    onClick={() => setOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </Modal>
+          </main>
         </section>
       ))}
+      <ToastContainer />
     </div>
   );
 }

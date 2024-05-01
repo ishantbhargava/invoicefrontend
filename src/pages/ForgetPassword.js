@@ -5,30 +5,55 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-
+import EmailValidator from "email-validator";
+import PasswordValidator from "password-validator";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [answer, setAnswer] = useState("");
-
   const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    const schema = new PasswordValidator();
+    schema
+      .is()
+      .min(8)
+      .is()
+      .max(100)
+      .has()
+      .uppercase()
+      .has()
+      .lowercase()
+      .has()
+      .digits(1)
+      .has()
+      .not()
+      .spaces();
+
+    return schema.validate(password);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!EmailValidator.validate(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (!validatePassword(newPassword)) {
+      toast.error("please enter a strong password ");
+      return;
+    }
     try {
       if (!email) {
         toast.error("email is required");
       } else if (!newPassword) {
         toast.error("password is required");
-      } else if (!answer) {
-        toast.error("answer is required");
       }
       const res = await axios.post(
         `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/forget-password`,
         {
           email,
           newPassword,
-          answer,
         }
       );
 
@@ -117,28 +142,7 @@ const ForgotPassword = () => {
                               />
                             </div>
                           </div>
-                          <label
-                            htmlFor="password"
-                            className="form-label text-start"
-                          >
-                            <small className="fw-bold">
-                              write your favorite sport
-                            </small>
-                          </label>
-                          <div className="col-12">
-                            <div className="form-floating ">
-                              <input
-                                type="password"
-                                style={{ fontSize: "12px" }}
-                                placeholder="ex - cricket"
-                                value={answer}
-                                onChange={(e) => setAnswer(e.target.value)}
-                                required
-                                className="w-100 rounded
-                          border border-grey font-weight-light p-2 text-secondary blackquote "
-                              />
-                            </div>
-                          </div>
+
                           <div className="col-12   ">
                             <div className="d-grid  ">
                               <button

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePdf } from "./Preview";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function YourInfo({ invoice, sendData }) {
   const navigate = useNavigate("");
   const [name, setName] = useState();
@@ -14,8 +16,19 @@ function YourInfo({ invoice, sendData }) {
   const [notes, setNotes] = useState();
   const { downloadPdf } = usePdf();
   const [loader, setLoader] = useState(false);
-  const sendDataToParent = () =>
+
+  const sendDataToParent = () => {
+    // let hasInvalidPrice = false;
+    // if (parseFloat(tax) <= 0 || parseFloat(tax) <= 0) {
+    //   hasInvalidPrice = true;
+    // }
+    // if (hasInvalidPrice) {
+    //   toast.error("tax should be a positive number");
+    //   return;
+    // }
+
     sendData(name, address, city, state, code, country, email, tax, notes);
+  };
   const downloadFunction = async () => {
     setLoader(true);
     await downloadPdf();
@@ -160,6 +173,7 @@ function YourInfo({ invoice, sendData }) {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -5,19 +5,55 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EmailValidator from "email-validator";
+import PasswordValidator from "password-validator";
 function SignUp() {
   const Navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [answer, setAnswer] = useState("");
+
+  const validatePassword = (password) => {
+    const schema = new PasswordValidator();
+    schema
+      .is()
+      .min(8)
+      .is()
+      .max(100)
+      .has()
+      .uppercase()
+      .has()
+      .lowercase()
+      .has()
+      .digits(1)
+      .has()
+      .not()
+      .spaces();
+
+    return schema.validate(password);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validatePassword(password)) {
+      toast.error("please enter a strong password ");
+      return;
+    }
+
+    if (!EmailValidator.validate(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
     try {
-      const res = await axios.post(`${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/signup`, {
-        email,
-        password,
-        answer,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/signup`,
+        {
+          email,
+          password,
+          answer,
+        }
+      );
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
 

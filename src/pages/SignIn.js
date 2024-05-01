@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/Auth";
+import EmailValidator from "email-validator";
+
 function SignIn() {
   const Navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -19,6 +21,10 @@ function SignIn() {
     }
 
     e.preventDefault();
+    if (!EmailValidator.validate(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
 
     try {
       const res = await axios.post(

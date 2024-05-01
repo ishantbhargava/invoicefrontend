@@ -2,6 +2,7 @@ import react, { useState, useEffect } from "react";
 import { createContext, useContext } from "react";
 import html2canvas from "html2canvas";
 import jsPdf from "jspdf";
+import { ToastContainer } from "react-toastify";
 const MyContext = createContext();
 const MyContextProvider = ({ children }) => {
   const [loader, setLoader] = useState(false);
@@ -11,9 +12,17 @@ const MyContextProvider = ({ children }) => {
     html2canvas(capture).then((canvas) => {
       const imgData = canvas.toDataURL("img/png");
       const doc = new jsPdf("p", "mm", "a4");
+      let scale = 1;
       const componentWidth = doc.internal.pageSize.getWidth();
       const componentHeight = doc.internal.pageSize.getHeight();
-      doc.addImage(imgData, "  PNG", 0, 0, componentWidth, componentHeight);
+      doc.addImage(
+        imgData,
+        "  PNG",
+        0,
+        0,
+        componentWidth * scale,
+        componentHeight * scale
+      );
       setLoader(false);
       doc.save("reciept.pdf");
     });
@@ -36,7 +45,7 @@ function Preview({ invoice, info = {} }) {
       <div>
         <p className="fw-bold text-secondary">Preview</p>
         <div className="bg-white  border preview-head rounded">
-          <div className="mx-4 py-4 ">
+          <div className="px-1 py-4 ">
             <>
               <h2 className="fw-bolder">Invoice</h2>
               <div>
@@ -132,6 +141,7 @@ function Preview({ invoice, info = {} }) {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
