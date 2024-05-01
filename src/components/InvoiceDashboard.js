@@ -12,7 +12,6 @@ function InvoiceDashboard({ invoices, getAllInvoices }) {
   //const [companyName, setCompanyName] = useState();
   const [open, setOpen] = useState(false);
 
-  const cancelButtonRef = useRef(null);
   const Modal = ({ open, onClose, children }) => (
     // backdrop
     <div
