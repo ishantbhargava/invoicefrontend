@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
-import { useAuth } from "./../context/Auth";
+import { useAuth } from "../context/Auth";
 import { Card } from "antd";
 
 import { useNavigate } from "react-router-dom";
-function UserInfoandStats() {
+function InfoandStats() {
   const [auth, setAuth] = useAuth("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate("");
@@ -91,4 +91,4 @@ function UserInfoandStats() {
   );
 }
 
-export default UserInfoandStats;
+export default InfoandStats;

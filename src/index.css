@@ -91,12 +91,6 @@ div {
   .checkout-card {
     padding: 0 15px 0 15px;
   }
-  .generater-page {
-    width: 90%;
-    padding: 0 25x 0 25px;
-    border: solid 1px transparent;
-    border-radius: 2%;
-  }
 }
 .generater-flex {
 }
@@ -104,13 +98,6 @@ div {
   color: rgb(52, 53, 54);
 }
 
-.btn-back {
-  background-color: rgb(212, 212, 216);
-}
-.btn-back:hover {
-  background-color: grey;
-  color: white;
-}
 .answers {
   width: 100%;
 }
@@ -172,18 +159,8 @@ div {
   .checkout-card {
     padding: 0 25px 0 25px;
   }
-  .generater-page {
-    width: 33%;
-    padding: 0 25x 0 25px;
-    border: solid 1px transparent;
-    border-radius: 2%;
-  }
+
   .preview-head {
     width: 700px;
   }
-}
-
-.gene-page-text {
-  font-size: 13px;
-  font-weight: 600;
 }

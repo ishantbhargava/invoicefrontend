@@ -1,0 +1,21 @@
+@media only screen and (max-width: 500px) {
+  .generater-page {
+    width: 90%;
+    padding: 0 25x 0 25px;
+    border: solid 1px transparent;
+    border-radius: 2%;
+  }
+}
+@media only screen and (min-width: 500px) {
+  .generater-page {
+    width: 33%;
+    padding: 0 25x 0 25px;
+    border: solid 1px transparent;
+    border-radius: 2%;
+  }
+}
+
+.gene-page-text {
+  font-size: 13px;
+  font-weight: 600;
+}

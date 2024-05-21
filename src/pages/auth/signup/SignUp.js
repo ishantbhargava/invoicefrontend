@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { LeftOutlined } from "@ant-design/icons";
-import logo from "../images/logo.png";
+import logo from "../../../images/logo.png";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EmailValidator from "email-validator";
 import PasswordValidator from "password-validator";
+import { createUser } from "../../../services/UserApis";
+import "./signup.css";
 function SignUp() {
   const Navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [answer, setAnswer] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const validatePassword = (password) => {
     const schema = new PasswordValidator();
@@ -33,8 +38,8 @@ function SignUp() {
     return schema.validate(password);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    const { email, password } = data;
 
     if (!validatePassword(password)) {
       toast.error("please enter a strong password ");
@@ -45,33 +50,27 @@ function SignUp() {
       toast.error("Please enter a valid email address");
       return;
     }
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/signup`,
-        {
-          email,
-          password,
-          answer,
-        }
-      );
-      if (res && res.data.success) {
-        toast.success(res.data && res.data.message);
 
+    try {
+      const res = await createUser(email, password);
+      if (res && res?.success) {
+        toast.success(res && res?.message);
         Navigate("/login");
       } else {
-        toast.error(res.data && res.data.message);
+        toast.error(res && res?.message);
       }
     } catch (error) {
       console.log(error);
       toast.error("something went wrong");
     }
   };
+
   return (
     <div style={{ backgroundColor: "rgb(248 250 252)", height: "100%" }}>
       {" "}
       <button
         type="button"
-        class="btn  btn-back  mx-4 mt-5 h6    "
+        className="btn  btn-back  mx-4 mt-5 h6    "
         onClick={() => Navigate("/")}
       >
         <small>
@@ -97,7 +96,7 @@ function SignUp() {
                         <div className="col-12"></div>
                       </div>
                       <form
-                        onSubmit={handleSubmit}
+                        onSubmit={handleSubmit(onSubmit)}
                         action="#!"
                         className="h-100"
                       >
@@ -111,12 +110,16 @@ function SignUp() {
                                 style={{ fontSize: "12px" }}
                                 type="email"
                                 placeholder="your@example.com"
-                                className="w-100 rounded
-                              text-secondary
-                              border border-grey font-weight-light p-2  blackquote    "
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
+                                className={`w-100 rounded text-secondary border ${
+                                  errors.email ? "border-danger" : "border-grey"
+                                } font-weight-light p-2  blackquote    `}
+                                {...register("email", { required: true })}
                               />
+                              {errors.email && (
+                                <p className="text-danger">
+                                  This field is required
+                                </p>
+                              )}
                             </div>
                           </div>
                           <label
@@ -130,34 +133,22 @@ function SignUp() {
                               <input
                                 placeholder="......."
                                 style={{ fontSize: "12px" }}
-                                className="w-100 rounded
-                            border border-grey font-weight-light text-secondary p-2 blackquote "
+                                className={`w-100 rounded border ${
+                                  errors.password
+                                    ? "border-danger"
+                                    : "border-grey"
+                                } font-weight-light text-secondary p-2 blackquote `}
                                 type="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
+                                {...register("password", { required: true })}
                               />
+                              {errors.password && (
+                                <p className="text-danger">
+                                  This field is required
+                                </p>
+                              )}
                             </div>
                           </div>
-                          <label
-                            htmlFor="password"
-                            className="form-label text-start"
-                          >
-                            <small className="fw-bold">
-                              what is your favorite sports name
-                            </small>
-                          </label>
-                          <div className="col-12">
-                            <div className="form-floating ">
-                              <input
-                                placeholder="ex - cricket"
-                                style={{ fontSize: "12px" }}
-                                className="w-100 rounded
-                            border border-grey font-weight-light text-secondary p-2 blackquote "
-                                onChange={(e) => setAnswer(e.target.value)}
-                                required
-                              />
-                            </div>
-                          </div>
+
                           <div className="col-12">
                             <div className="d-grid">
                               <button

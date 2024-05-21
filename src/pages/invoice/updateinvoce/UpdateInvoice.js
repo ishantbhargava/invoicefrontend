@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import EmailValidator from "email-validator";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const UpdatePages = () => {
+import "./updateinvoice.css";
+import { getBySlug, update } from "../../../services/InvoiceApis";
+const UpdateInvoice = () => {
   const [companyName, setCompanyName] = useState("");
   const [companyEmail, setCompanyEmail] = useState("");
   const [companyAddress, setCompanyAddress] = useState("");
@@ -13,19 +16,18 @@ const UpdatePages = () => {
   ]);
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { id } = useParams();
 
   useEffect(() => {
     const getInvoiceBySlug = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/get-invoice/${slug}`
-        );
-        const invoiceData = res.data.invoice;
+        const res = await getBySlug(slug);
+
+        const invoiceData = res.invoice;
+        console.log("res = ", invoiceData);
         setCompanyName(invoiceData.companyName);
         setCompanyEmail(invoiceData.companyEmail);
         setCompanyAddress(invoiceData.companyAddress);
-        setProductList(invoiceData.products);
+        setProductList(invoiceData.products || []);
       } catch (error) {
         console.error(error);
       }
@@ -67,8 +69,10 @@ const UpdatePages = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(productList);
-
+    if (!EmailValidator.validate(companyEmail)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
     try {
       let hasInvalidPrice = false;
       productList.forEach((product) => {
@@ -83,15 +87,18 @@ const UpdatePages = () => {
         toast.error("Price and quantity should be a positive number");
         return;
       }
-      const res = await axios.put(
-        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/update-invoice/${slug}`,
-        { companyName, companyEmail, companyAddress, products: productList }
+      const res = await update(
+        companyName,
+        companyEmail,
+        companyAddress,
+        productList,
+        slug
       );
-      if (res && res.data.success) {
-        toast.success(res.data && res.data.message);
+      if (res && res.success) {
+        toast.success(res.data && res.message);
         navigate("/dashboard");
       } else {
-        toast.error(res.data && res.data.message);
+        toast.error(res && res.message);
       }
     } catch (error) {
       console.log(error);
@@ -100,7 +107,7 @@ const UpdatePages = () => {
   };
 
   return (
-    <div className="h-100">
+    <div className="">
       <div className="pt-5 h-100">
         <div className="generater-page mx-auto bg-white h-100  ">
           <div className="mx-3 ">
@@ -225,4 +232,4 @@ const UpdatePages = () => {
   );
 };
 
-export default UpdatePages;
+export default UpdateInvoice;

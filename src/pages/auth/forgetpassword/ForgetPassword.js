@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { DoubleLeftOutlined } from "@ant-design/icons";
-import logo from "../images/logo.png";
+import logo from "../../../images/logo.png";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import EmailValidator from "email-validator";
 import PasswordValidator from "password-validator";
+import "./forget.css";
+import { forgetUser } from "../../../services/UserApis";
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
 
   const validatePassword = (password) => {
@@ -32,63 +38,48 @@ const ForgotPassword = () => {
     return schema.validate(password);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    const { email, newPassword } = data;
+
     if (!EmailValidator.validate(email)) {
       toast.error("Please enter a valid email address");
       return;
     }
 
     if (!validatePassword(newPassword)) {
-      toast.error("please enter a strong password ");
+      toast.error("Please enter a strong password");
       return;
     }
+
     try {
-      if (!email) {
-        toast.error("email is required");
-      } else if (!newPassword) {
-        toast.error("password is required");
-      }
-      const res = await axios.post(
-        `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/auth/forget-password`,
-        {
-          email,
-          newPassword,
-        }
-      );
-
-      if (res && res.data.success) {
-        toast.success(res.data.message);
-
+      const res = await forgetUser(email, newPassword);
+      if (res && res?.success) {
+        toast.success(res?.message);
         navigate("/login");
-        toast.success(res.data.message);
       } else {
-        toast.error(res.data.message);
-        alert(res.data.message);
+        toast.error(res?.message);
       }
-    } catch (err) {
-      console.log(err.res);
-      toast.error(err);
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <div style={{ backgroundColor: "rgb(248 250 252)" }}>
-      {" "}
+    <div style={{ backgroundColor: "rgb(248 250 252)" }} className="h-100">
       <button
         type="button"
-        class="btn  btn-back  mx-4 mt-5 h6  h-100    "
+        className="btn  btn-back  mx-4 mt-5 h6  h-100    "
         onClick={() => navigate("/")}
       >
         <DoubleLeftOutlined className="align-baseline" /> Back
       </button>
       <div className="d-flex flex-column gap-5 text-center">
         <div>
-          {" "}
           <img src={logo} alt="logo" />
         </div>
         <div>
-          <div className="fw-bold h4">Password assistance</div>
+          <div className="fw-bold h4">Password Assistance</div>
         </div>
         <>
           <section className="bg-light mx-1  ">
@@ -103,7 +94,7 @@ const ForgotPassword = () => {
                       <form
                         action="#!"
                         className="h-100"
-                        onSubmit={handleSubmit}
+                        onSubmit={handleSubmit(onSubmit)}
                       >
                         <div className="row gy-3 mx-1 mt-2  overflow-hidden">
                           <label htmlFor="email" className=" text-start">
@@ -112,14 +103,19 @@ const ForgotPassword = () => {
                           <div className="col-12">
                             <div className="form-floating ">
                               <input
-                                value={email}
                                 type="email"
                                 style={{ fontSize: "12px" }}
-                                onChange={(e) => setEmail(e.target.value)}
                                 placeholder="your@example.com"
-                                className="w-100 rounded 
-                         border border-grey font-weight-light p-2 text-secondary  blackquote    "
+                                className={`w-100 rounded border ${
+                                  errors.email ? "border-danger" : "border-grey"
+                                } font-weight-light p-2 text-secondary  blackquote    `}
+                                {...register("email", { required: true })}
                               />
+                              {errors.email && (
+                                <p className="text-danger">
+                                  This field is required
+                                </p>
+                              )}
                             </div>
                           </div>
                           <label
@@ -134,12 +130,18 @@ const ForgotPassword = () => {
                                 type="password"
                                 style={{ fontSize: "12px" }}
                                 placeholder="......."
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                required
-                                className="w-100 rounded
-                         border border-grey font-weight-light p-2 text-secondary blackquote "
+                                className={`w-100 rounded border ${
+                                  errors.newPassword
+                                    ? "border-danger"
+                                    : "border-grey"
+                                } font-weight-light p-2 text-secondary blackquote `}
+                                {...register("newPassword", { required: true })}
                               />
+                              {errors.newPassword && (
+                                <p className="text-danger">
+                                  This field is required
+                                </p>
+                              )}
                             </div>
                           </div>
 
@@ -153,7 +155,7 @@ const ForgotPassword = () => {
                                 className="btn bsb-btn-xl mt-2 btn-primary"
                                 type="submit"
                               >
-                                update password
+                                Update Password
                               </button>
                             </div>
                           </div>

@@ -1,41 +1,38 @@
-import logo from "./logo.svg";
 import "./App.css";
-import HomePage from "./pages/HomePage";
+import LandingPage from "./pages/LandingPage";
 import { Routes, Route } from "react-router-dom";
-import SignUp from "./pages/SignUp";
+import SignUp from "./pages/auth/signup/SignUp";
 import Pagenotfound from "./pages/PageNotFound";
-import SignIn from "./pages/SignIn";
+import SignIn from "./pages/auth/signIn/SignIn";
 import TermPolicy from "./pages/Term-Policy";
-import DashBoard from "./pages/DashBoard";
+import HomePage from "./pages/HomePage";
 import Protected from "./pages/Protected";
-import CheckOut from "./pages/CheckOut";
-import ForgetPassword from "./pages/ForgetPassword";
-import LastPage from "./pages/LastPage";
-import CreateInvoice from "./pages/CreateInvoice";
-import UpdatePages from "./pages/UpdatePages";
+import ForgetPassword from "./pages/auth/forgetpassword/ForgetPassword";
+import ShowInvoice from "./pages/invoice/showinvoice/ShowInvoice";
+import CreateInvoice from "./pages/invoice/createinvoice/CreateInvoice";
+import UpdateInvoice from "./pages/invoice/updateinvoce/UpdateInvoice";
 
 function App() {
   return (
     <div style={{ backgroundColor: "rgb(248 250 252)" }} className="App">
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
 
         <Route path="/term-policy" element={<TermPolicy />} />
-        <Route path="/checkout" element={<CheckOut />} />
         <Route
           path="/get-invoice/:slug"
-          element={<Protected Component={LastPage} />}
+          element={<Protected Component={ShowInvoice} />}
         ></Route>
         <Route
           path="/update-invoice/:slug"
-          element={<Protected Component={UpdatePages} />}
+          element={<Protected Component={UpdateInvoice} />}
         ></Route>
         <Route
           path="/dashboard"
-          element={<Protected Component={DashBoard} />}
+          element={<Protected Component={HomePage} />}
         ></Route>
         <Route
           path="/create-invoice"
