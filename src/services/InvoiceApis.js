@@ -1,12 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:9999/";
-//"https://invoice-app-repo-api.onrender.com/";
-
 export const createInvoice = async (SentFormData) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}api/v1/invoice/create-invoice`,
+      `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/create-invoice`,
       SentFormData
     );
     return response.data;
@@ -19,7 +16,7 @@ export const createInvoice = async (SentFormData) => {
 export const getAll = async (token) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}api/v1/invoice/dashboard`,
+      `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/dashboard`,
       {
         headers: {
           Authorization: `${token}`,
@@ -37,7 +34,7 @@ export const getAll = async (token) => {
 export const deleteById = async (id) => {
   try {
     const response = await axios.delete(
-      `${API_BASE_URL}api/v1/invoice/delete-invoice/${id}`
+      `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/delete-invoice/${id}`
     );
     return response.data;
   } catch (error) {
@@ -49,7 +46,7 @@ export const deleteById = async (id) => {
 export const getBySlug = async (slug) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}api/v1/invoice/get-invoice/${slug}`
+      `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/get-invoice/${slug}`
     );
     console.log("res by slug", response.data);
     return response.data;
@@ -68,7 +65,7 @@ export const update = async (
 ) => {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}api/v1/invoice/update-invoice/${slug}`,
+      `${process.env.REACT_APP_NOT_SECRET_CODE}api/v1/invoice/update-invoice/${slug}`,
       { companyName, companyEmail, companyAddress, products: productList }
     );
     console.log(response.data);
